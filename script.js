@@ -1,22 +1,3 @@
-/* =========================================================
-   BLOOM
-   A gentle daily planner. Everything you type is saved only
-   in this browser, on this device (localStorage).
-
-   PART 1  Settings you can tweak
-   PART 2  Starting template (generic, safe to be public)
-   PART 3  Saving and loading
-   PART 4  Small helpers
-   PART 5  Drawing each page
-   PART 6  Actions (what happens when you tap things)
-   PART 7  Start the app
-   ========================================================= */
-
-
-/* =========================================================
-   PART 1: SETTINGS YOU CAN TWEAK
-   ========================================================= */
-
 /* Healthy Mind Platter: one task per slice, per energy level */
 const PLATTER = [
   { id: "sleep",    name: "Sleep time",      color: "#7C8CD9", 20: "Wake and lights out on time", 50: "Wake and lights out on time", 100: "Wake and lights out on time" },
