@@ -2,11 +2,303 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- Ask search engines not to list this site -->
   <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#FFB76E">
   <title>Bloom</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Bloom is growing 🌱</h1>
+<!-- The sky behind the top of every page. Changes with the time of day. -->
+<div class="sky" id="sky" aria-hidden="true">
+  <div class="stars"></div>
+  <div class="orb"></div>
+</div>
+
+<main>
+
+  <!-- =====================================================
+       HOME: just today
+       ===================================================== -->
+  <section class="view" data-view="home">
+    <p class="motto">Bloom where you are placed</p>
+    <h1 id="homeTitle">Hello</h1>
+    <p class="sub" id="homeDate"></p>
+    <div class="cols">
+    <div class="col col-a">
+
+    <!-- The flower is the centrepiece of Home -->
+    <div class="hero">
+      <div class="bloom" id="bloom"></div>
+      <p class="status" id="bloomStatus" aria-live="polite"></p>
+    </div>
+
+    <section class="card">
+      <h2>How much energy do I have today?</h2>
+      <div class="levels" id="levels"></div>
+      <p class="muted" id="levelNote"></p>
+    </section>
+
+    <!-- Only shows on 🌱 days -->
+    <section class="card lowday" id="lowday" hidden></section>
+    </div>
+    <div class="col col-b">
+
+    <!-- A small shortcut to the Today page -->
+    <button class="card today-link" data-go="today">
+      <span id="todaySummary">Today's tasks</span>
+      <span aria-hidden="true">›</span>
+    </button>
+
+    <section class="card">
+      <h2>Today's platter</h2>
+      <p class="muted">Each slice you care for grows a petal on your flower. Tap a petal or tick the list.</p>
+      <div id="platter"></div>
+    </section>
+
+    <section class="card">
+      <h2>Time in</h2>
+      <label class="muted" for="timeinInput">One thing I noticed today</label>
+      <input id="timeinInput" maxlength="140" placeholder="Just one line">
+      <p class="saved" id="timeinSaved" aria-live="polite"></p>
+    </section>
+    </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       TODAY: tasks and timeline
+       ===================================================== -->
+  <section class="view" data-view="today" hidden>
+    <h1>Today</h1>
+    <p class="sub" id="todayDate"></p>
+    <p class="energy-chip" id="energyChip"></p>
+    <div class="cols">
+    <div class="col col-a">
+
+    <!-- Appears after you finish a first step -->
+    <section class="card nextstep" id="nextStep" hidden></section>
+
+    <section class="card">
+      <h2>Today's tasks</h2>
+      <p class="muted" id="taskHint"></p>
+      <ul class="tasks" id="todayTasks"></ul>
+      <form class="add-row" id="todayTaskForm">
+        <input name="text" placeholder="Add a task, like 'robotics for 1 hour'" maxlength="120" aria-label="New task">
+        <select name="slice" aria-label="Which slice does it care for?"></select>
+        <button type="submit">Add</button>
+      </form>
+    </section>
+
+    </div>
+    <div class="col col-b">
+
+    <section class="card">
+      <h2>Timeline</h2>
+      <div id="homeTimeline"></div>
+    </section>
+    </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       PLAN: the week
+       ===================================================== -->
+  <section class="view" data-view="plan" hidden>
+    <h1>Plan</h1>
+    <p class="sub">Set up your week. Everything you type stays on this device.</p>
+
+    <div class="tabs" id="planDays" role="tablist"></div>
+    <div class="cols">
+    <div class="col col-a">
+
+    <section class="card">
+      <div class="card-head">
+        <h2 id="planDayTitle"></h2>
+        <button class="ghost" data-action="edit-toggle" id="editToggle">Edit</button>
+      </div>
+      <div id="planTimeline"></div>
+    </section>
+    </div>
+    <div class="col col-b">
+
+    <section class="card">
+      <h2>Tasks for this day</h2>
+      <ul class="tasks" id="planTasks"></ul>
+      <form class="add-row" id="planTaskForm">
+        <input name="text" placeholder="Plan a task for this day" maxlength="120" aria-label="New task">
+        <select name="slice" aria-label="Which slice does it care for?"></select>
+        <button type="submit">Add</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Hobby blocks this week</h2>
+      <p class="muted">Three blocks of 1–2 hours, any days you like.</p>
+      <div class="hobbies" id="hobbies"></div>
+    </section>
+    </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       JARS: wins, carry-over, garden
+       ===================================================== -->
+  <section class="view" data-view="jars" hidden>
+    <h1>Jars</h1>
+    <p class="sub">Proof that things are happening.</p>
+    <div class="cols">
+    <div class="col col-a">
+
+    <section class="card">
+      <h2>Wins jar</h2>
+      <p class="muted" id="winsCount"></p>
+      <div class="jar" id="jar"></div>
+      <button class="ghost" data-action="random-win">Show me a win</button>
+      <p class="quote" id="randomWin"></p>
+      <form class="add-row" id="winForm">
+        <input name="text" placeholder="A small win, like 'ate breakfast'" maxlength="120" aria-label="New win">
+        <button type="submit">Add win</button>
+      </form>
+      <ul class="simple-list" id="winsList"></ul>
+    </section>
+    </div>
+    <div class="col col-b">
+
+    <section class="card">
+      <h2>Carry-over basket</h2>
+      <p class="muted">Things that haven't happened yet. Move them to today, or let them go. Both are fine.</p>
+      <ul class="tasks" id="basket"></ul>
+    </section>
+
+    <section class="card">
+      <h2>This week's garden</h2>
+      <p class="muted" id="gardenNote"></p>
+      <div class="garden" id="garden"></div>
+    </section>
+    </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       KIT: first step + low-day notes
+       ===================================================== -->
+  <section class="view" data-view="kit" hidden>
+    <h1>Kit</h1>
+    <p class="sub">For the days that feel heavy.</p>
+    <div class="cols">
+    <div class="col col-a">
+
+    <section class="card">
+      <h2>Just the first step</h2>
+      <p class="muted">Big thing feels impossible? Write only the first tiny step. Nothing is too small.</p>
+      <form class="stack" id="firstStepForm">
+        <label>The big thing
+          <input name="big" placeholder="Clean my room" maxlength="120">
+        </label>
+        <label>The tiny first step
+          <input name="step" placeholder="Put one thing in the laundry basket" maxlength="120">
+        </label>
+        <label>Which slice does it care for?
+          <select name="slice"></select>
+        </label>
+        <button type="submit">Add first step to today</button>
+      </form>
+    </section>
+    </div>
+    <div class="col col-b">
+
+    <section class="card">
+      <h2>Notes to my low days</h2>
+      <p class="muted">Write these on good days. On a 🌱 day, Home shows you one.</p>
+      <form class="add-row" id="kitForm">
+        <input name="text" placeholder="You got through hard days before" maxlength="200" aria-label="New note">
+        <button type="submit">Save</button>
+      </form>
+      <ul class="simple-list" id="kitList"></ul>
+    </section>
+    </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       NOTES: history, counselling, rules, settings
+       ===================================================== -->
+  <section class="view" data-view="notes" hidden>
+    <h1>Notes</h1>
+    <div class="cols">
+    <div class="col col-a">
+
+    <section class="card">
+      <h2>Time-in history</h2>
+      <ul class="simple-list" id="timeinList"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Counselling takeaways</h2>
+      <p class="muted">Things to remember, and questions for next time.</p>
+      <form class="add-row" id="counselForm">
+        <input name="text" placeholder="Add a takeaway or question" maxlength="300" aria-label="New takeaway">
+        <button type="submit">Add</button>
+      </form>
+      <ul class="simple-list" id="counselList"></ul>
+    </section>
+    </div>
+    <div class="col col-b">
+
+    <section class="card">
+      <h2>House rules</h2>
+      <ul class="simple-list" id="rulesList"></ul>
+      <form class="add-row" id="ruleForm">
+        <input name="text" placeholder="Add a rule" maxlength="150" aria-label="New rule">
+        <button type="submit">Add</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Settings</h2>
+      <label class="stack-label">What should Bloom call you?
+        <input id="nameInput" maxlength="30" placeholder="Your name">
+      </label>
+      <label class="check">
+        <input type="checkbox" id="chimeToggle">
+        <span>Soft chime when I finish things</span>
+      </label>
+      <p class="muted">Your data lives only in this browser, on this device. Download a backup now and then.</p>
+      <div class="btn-row">
+        <button data-action="export">Download backup</button>
+        <label class="button ghost">Restore backup
+          <input type="file" id="importFile" accept="application/json,.json" hidden>
+        </label>
+      </div>
+      <button class="ghost danger" data-action="reset">Erase everything</button>
+    </section>
+    </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Menu: three lines at the top right -->
+<button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+  <span></span><span></span><span></span>
+</button>
+<nav class="menu" id="menu" aria-label="Sections" hidden>
+  <button data-go="home"><span aria-hidden="true">🏡</span>Home</button>
+  <button data-go="today"><span aria-hidden="true">✅</span>Today</button>
+  <button data-go="plan"><span aria-hidden="true">🗓️</span>Plan</button>
+  <button data-go="jars"><span aria-hidden="true">🫙</span>Jars</button>
+  <button data-go="kit"><span aria-hidden="true">💌</span>Kit</button>
+  <button data-go="notes"><span aria-hidden="true">📓</span>Notes</button>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="script.js"></script>
 </body>
 </html>
