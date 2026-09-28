@@ -1,4 +1,23 @@
-/* Healthy Mind Platter: one task per petal, per energy level */
+/* =========================================================
+   BLOOM
+   A gentle daily planner. Everything you type is saved only
+   in this browser, on this device (localStorage).
+
+   PART 1  Settings you can tweak
+   PART 2  Starting template (generic, safe to be public)
+   PART 3  Saving and loading
+   PART 4  Small helpers
+   PART 5  Drawing each page
+   PART 6  Actions (what happens when you tap things)
+   PART 7  Start the app
+   ========================================================= */
+
+
+/* =========================================================
+   PART 1: SETTINGS YOU CAN TWEAK
+   ========================================================= */
+
+/* Healthy Mind Platter: one task per slice, per energy level */
 const PLATTER = [
   { id: "sleep",    name: "Sleep time",      color: "#7C8CD9", 20: "Wake and lights out on time", 50: "Wake and lights out on time", 100: "Wake and lights out on time" },
   { id: "physical", name: "Physical time",   color: "#F2A65A", 20: "5-min stretch",               50: "10-min walk",                 100: "Home workout and a walk" },
@@ -30,6 +49,13 @@ const HOBBY_OPTIONS = ["Writing", "Singing", "Painting"];
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const FULL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
+
+/* =========================================================
+   PART 2: STARTING TEMPLATE
+   Generic on purpose: this file is public. Make it yours
+   inside the app (Plan → Edit), not here.
+   min = lowest energy level that shows the item (20, 50, 100)
+   ========================================================= */
 
 function template() {
   const morning = [
@@ -97,6 +123,7 @@ function freshData() {
       "App timers on.",
       "Never miss twice.",
       "A 20% day done at 20% is a complete day.",
+      "Missed days are blank, never red."
     ].map(text => ({ id: uid(), text })),
     settings: { chime: true, name: "" }
   };
@@ -131,7 +158,7 @@ function save() {
 
 
 /* =========================================================
-    HELPERS
+   PART 4: SMALL HELPERS
    ========================================================= */
 
 function uid() {
@@ -221,7 +248,7 @@ let planDay = dayIndex();
 let editing = false;
 let justToggled = null;
 let lastSeenWins = null;
-let nextStepFor = null;    
+let nextStepFor = null;    // { big, slice, taskId } after finishing a first step   // for the jar drop animation
 
 function render() {
   document.querySelectorAll(".view").forEach(v => { v.hidden = v.dataset.view !== currentView; });
